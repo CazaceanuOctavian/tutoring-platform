@@ -1,1 +1,68 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ===== Django =====
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Django migrations (optional – usually keep these)
+# */migrations/*
+# !*/migrations/__init__.py
+
+# ===== Environment / Secrets =====
 env_setup/.mongo
+.env
+.env.*
+*.env
+secrets.json
+
+# ===== Virtual Environments =====
+venv/
+.venv/
+env/
+ENV/
+
+# ===== Static files (usually generated) =====
+staticfiles/
+static/
+
+# ===== Testing / Coverage =====
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+
+# ===== Packaging =====
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ===== IDEs / Editors =====
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ===== OS Files =====
+.DS_Store
+Thumbs.db
+
+# ===== Jupyter =====
+.ipynb_checkpoints/
+
+# ===== Logs =====
+*.log
+
+# ===== Celery =====
+celerybeat-schedule
+celerybeat.pid
+
+# ===== Redis =====
+dump.rdb
