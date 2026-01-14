@@ -1,5 +1,5 @@
 {
-  description = "Development environment with Python, Java, web scraping tools, PostgreSQL, MongoDB Shell, and Node.js";
+  description = "Development environment with Python, PostgreSQL, MongoDB Shell";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -12,23 +12,22 @@
            config.allowUnfree = true; # MongoDB packages are unfree
         };
         
-        # Python packages - merged from both configurations
         pythonEnv = pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
-          # From existing flake
-          pandas
+          # General
+          django
           requests
-          selenium
-          beautifulsoup4
-          configparser
+
+          # Python MongoDB driver
           psycopg2
-          scikit-learn
-          pymongo  # Python MongoDB driver
+          pymongo  
           
-          # From shell.nix
-          pip
-          ipython
+          # jupyter
           jupyter
           notebook
+          pip
+
+          # Graphs and plots
+          ipython
           scipy
           matplotlib
           seaborn
@@ -39,12 +38,7 @@
           packages = [
             # Python
             pythonEnv
-            # Java
-            pkgs.jdk
-            pkgs.maven
-            # Scraping
-            pkgs.geckodriver
-            pkgs.firefox
+
             # Databases
             pkgs.postgresql_15
             pkgs.mongodb-ce  # MongoDB server
