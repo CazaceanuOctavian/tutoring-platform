@@ -6,7 +6,7 @@ from models.lecture import Lecture
 from models.exercise import Exercise
 from models.submission import Submission
 from models.exercices_test_case import ExerciseTestCase
-
+from models.submission_result import SubmissionResult  
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,6 +21,7 @@ from routers import (
     course,
     enrollment,
     submission,
+    exercise
 )
 
 @asynccontextmanager
@@ -64,7 +65,7 @@ def create_app() -> FastAPI:
     app.include_router(course.router)
     app.include_router(enrollment.router)
     app.include_router(submission.router)
-
+    app.include_router(exercise.router)
     # ---------------------------
     # Health Check
     # ---------------------------
