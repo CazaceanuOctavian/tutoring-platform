@@ -25,9 +25,11 @@
           notebook
           pip
           ipython
+          passlib
           scipy
           matplotlib
           seaborn
+	  pydantic
         ]);
       in
       {
