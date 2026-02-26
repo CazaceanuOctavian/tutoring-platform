@@ -7,7 +7,119 @@ from db.session import get_db
 from models.course import Course
 from schemas.course import CourseCreate, CourseRead
 
+from schemas.lecture import LectureRead
+from models.lecture import Lecture
+
+from models.exercise import Exercise
+from schemas.exercise import ExerciseRead
+
+
 router = APIRouter(prefix="/courses", tags=["Courses"])
+
+@router.get("/{course_id}/lectures", response_model=list[LectureRead])
+async def get_course_lectures(
+    course_id: UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Course).where(Course.id == course_id)
+    )
+    course = result.scalar_one_or_none()
+
+    if not course:
+        raise HTTPException(404, "Course not found")
+
+    result = await db.execute(
+        select(Lecture)
+        .where(Lecture.course_id == course_id)
+        .order_by(Lecture.order_index)
+    )
+
+    return result.scalars().all()
+
+@router.get(
+    "/{course_id}/sections/{section_number}/lectures",
+    response_model=list[LectureRead],
+)
+async def get_lectures_by_section(
+    course_id: UUID,
+    section_number: int,
+    db: AsyncSession = Depends(get_db),
+):
+    course_result = await db.execute(
+        select(Course).where(Course.id == course_id)
+    )
+    course = course_result.scalar_one_or_none()
+
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+
+    result = await db.execute(
+        select(Lecture)
+        .where(
+            Lecture.course_id == course_id,
+            Lecture.section == section_number,
+        )
+        .order_by(Lecture.order_index)
+    )
+
+    lectures = result.scalars().all()
+
+    return lectures
+
+
+@router.get("/{course_id}/exercises", response_model=list[ExerciseRead])
+async def get_course_exercises(
+    course_id: UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    # check course exists
+    result = await db.execute(
+        select(Course).where(Course.id == course_id)
+    )
+    course = result.scalar_one_or_none()
+
+    if not course:
+        raise HTTPException(404, "Course not found")
+
+    result = await db.execute(
+        select(Exercise)
+        .where(Exercise.course_id == course_id)
+        .order_by(Exercise.order_index)
+    )
+
+    return result.scalars().all()
+
+
+@router.get(
+    "/{course_id}/sections/{section_number}/exercises",
+    response_model=list[ExerciseRead],
+)
+async def get_exercises_by_section(
+    course_id: UUID,
+    section_number: int,
+    db: AsyncSession = Depends(get_db),
+):
+    course_result = await db.execute(
+        select(Course).where(Course.id == course_id)
+    )
+    course = course_result.scalar_one_or_none()
+
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+
+    result = await db.execute(
+        select(Exercise)
+        .where(
+            Exercise.course_id == course_id,
+            Exercise.section == section_number,
+        )
+        .order_by(Exercise.order_index)
+    )
+
+    exercises = result.scalars().all()
+
+    return exercises
 
 
 @router.post("/", response_model=CourseRead)

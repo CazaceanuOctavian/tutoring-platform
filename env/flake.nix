@@ -15,6 +15,7 @@
         pythonEnv = pkgs.python312.withPackages (ps: with ps; [
           fastapi
           fastapi-cli
+          alembic
           requests
 	  aiohttp
           psycopg2

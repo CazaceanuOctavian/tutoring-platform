@@ -5,7 +5,7 @@ from models.enrollment import Enrollment
 from models.lecture import Lecture
 from models.exercise import Exercise
 from models.submission import Submission
-from models.exercices_test_case import ExerciseTestCase
+from models.exercise_test_case import ExerciseTestCase
 from models.submission_result import SubmissionResult  
 
 from fastapi import FastAPI
@@ -34,11 +34,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
-# ---------------------------
-# App Factory
-# ---------------------------
-
 def create_app() -> FastAPI:
     app = FastAPI(
         title="Tutoring Platform API",
@@ -66,6 +61,7 @@ def create_app() -> FastAPI:
     app.include_router(enrollment.router)
     app.include_router(submission.router)
     app.include_router(exercise.router)
+
     # ---------------------------
     # Health Check
     # ---------------------------
