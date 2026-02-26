@@ -9,6 +9,7 @@ class LectureBase(BaseModel):
     content: str
     section: str
     order_index: int
+    section: str
 
 class LectureCreate(LectureBase):
     course_id: UUID
@@ -17,5 +18,6 @@ class LectureRead(LectureBase):
     id: UUID
     course_id: UUID
     created_at: datetime
+    section: str
 
     model_config = ConfigDict(from_attributes=True)

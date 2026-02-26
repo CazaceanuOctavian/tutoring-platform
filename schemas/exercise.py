@@ -8,6 +8,7 @@ class ExerciseCreate(BaseModel):
     description: str | None = None    
     starter_code: str | None = None   
     order_index: int | None = None    
+    section: str
 
 class ExerciseRead(BaseModel):
     id: UUID
@@ -17,6 +18,7 @@ class ExerciseRead(BaseModel):
     starter_code: str | None
     order_index: int | None
     created_at: datetime
+    section: str
 
     class Config:
         from_attributes = True  

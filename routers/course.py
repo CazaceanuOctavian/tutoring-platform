@@ -4,15 +4,14 @@ from sqlalchemy import select
 from uuid import UUID
 
 from db.session import get_db
-from models.course import Course
 from schemas.course import CourseCreate, CourseRead
 
-from schemas.lecture import LectureRead
+from models.course import Course
 from models.lecture import Lecture
-
 from models.exercise import Exercise
-from schemas.exercise import ExerciseRead
-
+from schemas.course import CourseCreate, CourseRead
+from schemas.lecture import LectureCreate, LectureRead
+from schemas.exercise import ExerciseCreate, ExerciseRead
 
 router = APIRouter(prefix="/courses", tags=["Courses"])
 
@@ -43,7 +42,7 @@ async def get_course_lectures(
 )
 async def get_lectures_by_section(
     course_id: UUID,
-    section_number: int,
+    section: str,
     db: AsyncSession = Depends(get_db),
 ):
     course_result = await db.execute(
@@ -58,7 +57,7 @@ async def get_lectures_by_section(
         select(Lecture)
         .where(
             Lecture.course_id == course_id,
-            Lecture.section == section_number,
+            Lecture.section == section,
         )
         .order_by(Lecture.order_index)
     )
@@ -92,12 +91,12 @@ async def get_course_exercises(
 
 
 @router.get(
-    "/{course_id}/sections/{section_number}/exercises",
+    "/{course_id}/sections/{section}/exercises",
     response_model=list[ExerciseRead],
 )
 async def get_exercises_by_section(
     course_id: UUID,
-    section_number: int,
+    section: str,  
     db: AsyncSession = Depends(get_db),
 ):
     course_result = await db.execute(
@@ -112,13 +111,12 @@ async def get_exercises_by_section(
         select(Exercise)
         .where(
             Exercise.course_id == course_id,
-            Exercise.section == section_number,
+            Exercise.section == section,  
         )
         .order_by(Exercise.order_index)
     )
 
     exercises = result.scalars().all()
-
     return exercises
 
 
