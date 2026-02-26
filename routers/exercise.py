@@ -45,3 +45,18 @@ async def get_exercise(
         raise HTTPException(404, "Exercise not found")
 
     return exercise
+
+@router.delete("/{exercise_id}", status_code=204)
+async def delete_exercise(
+    exercise_id: UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Exercise).where(Exercise.id == exercise_id))
+    exercise = result.scalar_one_or_none()
+
+    if not exercise:
+        raise HTTPException(status_code=404, detail="Exercise not found")
+
+    await db.delete(exercise)
+    await db.commit()
+    return None  # 204 No Content doesn't return a body
