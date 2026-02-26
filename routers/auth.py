@@ -25,7 +25,7 @@ async def login(
     if not student or not verify_password(password, student.password_hash):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    access_token = create_access_token(str(student.id))
+    access_token = create_access_token(str(student.id), student.role)
     refresh_token = create_refresh_token(str(student.id))
 
     response.set_cookie(
@@ -59,8 +59,9 @@ async def refresh_token(request: Request, response: Response):
         raise HTTPException(status_code=401, detail="Invalid token type")
 
     student_id = payload["sub"]
+    role = payload['role']
 
-    new_access = create_access_token(student_id)
+    new_access = create_access_token(student_id, role)
 
     response.set_cookie(
         key="access_token",

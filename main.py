@@ -22,7 +22,8 @@ from routers import (
     submission,
     exercise,
     lectures, 
-    exercise_test_case
+    exercise_test_case,
+    auth
 )
 
 @asynccontextmanager
@@ -64,6 +65,7 @@ def create_app() -> FastAPI:
     app.include_router(exercise.router)
     app.include_router(exercise_test_case.router)
     app.include_router(lectures.router)
+    app.include_router(auth.router)
 
     # ---------------------------
     # Health Check
