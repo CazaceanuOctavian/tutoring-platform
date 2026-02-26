@@ -13,6 +13,8 @@ from schemas.exercise_test_case import (
     ExerciseTestCaseRead,
 )
 
+from dependencies.auth import require_admin
+
 router = APIRouter(prefix="/exercise-test-cases", tags=["Exercise Test Cases"])
 
 
@@ -20,6 +22,7 @@ router = APIRouter(prefix="/exercise-test-cases", tags=["Exercise Test Cases"])
 async def create_test_case(
     payload: ExerciseTestCaseCreate,
     db: AsyncSession = Depends(get_db),
+    admin = Depends(require_admin)
 ):
     
     result = await db.execute(
@@ -43,6 +46,7 @@ async def create_test_case(
 async def delete_test_case(
     test_case_id: UUID,
     db: AsyncSession = Depends(get_db),
+    admin = Depends(require_admin)
 ):
     result = await db.execute(
         select(ExerciseTestCase).where(ExerciseTestCase.id == test_case_id)

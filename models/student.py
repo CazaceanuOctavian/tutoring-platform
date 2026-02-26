@@ -25,6 +25,12 @@ class Student(Base):
         default=datetime.utcnow
     )
 
+    role: Mapped[str] = mapped_column(
+        String(50),
+        default="student",
+        nullable=False,
+    )
+
     # Relationships
     enrollments = relationship(
         "Enrollment",

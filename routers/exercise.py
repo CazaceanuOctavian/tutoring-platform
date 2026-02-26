@@ -10,6 +10,8 @@ from schemas.exercise import ExerciseCreate, ExerciseRead
 
 from schemas.exercise_test_case import ExerciseTestCaseCreate, ExerciseTestCaseRead
 
+from dependencies.auth import require_admin
+
 router = APIRouter(prefix="/exercises", tags=["Exercises"])
 
 @router.get("/{exercise_id}/test-cases", response_model=list[ExerciseTestCaseRead])
@@ -37,6 +39,7 @@ async def list_exercise_test_cases(
 async def create_exercise(
     payload: ExerciseCreate,
     db: AsyncSession = Depends(get_db),
+    admin = Depends(require_admin)
 ):
     exercise = Exercise(**payload.model_dump())
 
@@ -73,6 +76,7 @@ async def get_exercise(
 async def delete_exercise(
     exercise_id: UUID,
     db: AsyncSession = Depends(get_db),
+    admin = Depends(require_admin)
 ):
     result = await db.execute(select(Exercise).where(Exercise.id == exercise_id))
     exercise = result.scalar_one_or_none()

@@ -1,4 +1,3 @@
-# Import all models BEFORE creating tables
 from models.student import Student
 from models.course import Course
 from models.enrollment import Enrollment

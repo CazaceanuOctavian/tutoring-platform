@@ -27,6 +27,7 @@
           pip
           ipython
           passlib
+	  python-jose
           scipy
           matplotlib
           seaborn

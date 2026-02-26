@@ -7,12 +7,15 @@ from db.session import get_db
 from models.lecture import Lecture
 from schemas.lecture import LectureCreate, LectureRead
 
+from dependencies.auth import require_admin
+
 router = APIRouter(prefix="/lectures", tags=["Lectures"])
 
 @router.post("/", response_model=LectureRead)
 async def create_lecture(
     payload: LectureCreate,
     db: AsyncSession = Depends(get_db),
+    admin = Depends(require_admin)
 ):
     lecture = Lecture(**payload.model_dump())
 
@@ -49,6 +52,7 @@ async def get_lecture(
 async def delete_lecture(
     lecture_id: UUID,
     db: AsyncSession = Depends(get_db),
+    admin = Depends(require_admin)
 ):
     result = await db.execute(select(Lecture).where(Lecture.id == lecture_id))
     lecture = result.scalar_one_or_none()

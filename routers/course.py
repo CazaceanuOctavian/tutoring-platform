@@ -13,6 +13,8 @@ from schemas.course import CourseCreate, CourseRead
 from schemas.lecture import LectureCreate, LectureRead
 from schemas.exercise import ExerciseCreate, ExerciseRead
 
+from dependencies.auth import require_admin
+
 router = APIRouter(prefix="/courses", tags=["Courses"])
 
 @router.get("/{course_id}/lectures", response_model=list[LectureRead])
@@ -124,6 +126,7 @@ async def get_exercises_by_section(
 async def create_course(
     payload: CourseCreate,
     db: AsyncSession = Depends(get_db),
+    admin = Depends(require_admin)
 ):
     course = Course(**payload.model_dump())
 
@@ -161,6 +164,7 @@ async def get_course(
 async def delete_course(
     course_id: UUID,
     db: AsyncSession = Depends(get_db),
+    admin = Depends(require_admin)
 ):
     result = await db.execute(
         select(Course).where(Course.id == course_id)
