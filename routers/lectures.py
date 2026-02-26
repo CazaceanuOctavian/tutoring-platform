@@ -44,3 +44,18 @@ async def get_lecture(
         raise HTTPException(404, "Lecture not found")
 
     return lecture
+
+@router.delete("/{lecture_id}", status_code=204)
+async def delete_lecture(
+    lecture_id: UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Lecture).where(Lecture.id == lecture_id))
+    lecture = result.scalar_one_or_none()
+
+    if not lecture:
+        raise HTTPException(status_code=404, detail="Lecture not found")
+
+    await db.delete(lecture)
+    await db.commit()
+    return None
