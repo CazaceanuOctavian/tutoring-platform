@@ -21,7 +21,8 @@ from routers import (
     course,
     enrollment,
     submission,
-    exercise
+    exercise,
+    lectures
 )
 
 @asynccontextmanager
@@ -61,6 +62,7 @@ def create_app() -> FastAPI:
     app.include_router(enrollment.router)
     app.include_router(submission.router)
     app.include_router(exercise.router)
+    app.include_router(lectures.router)
 
     # ---------------------------
     # Health Check

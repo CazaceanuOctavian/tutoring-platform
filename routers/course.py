@@ -37,7 +37,7 @@ async def get_course_lectures(
     return result.scalars().all()
 
 @router.get(
-    "/{course_id}/sections/{section_number}/lectures",
+    "/{course_id}/sections/{section}/lectures",
     response_model=list[LectureRead],
 )
 async def get_lectures_by_section(
